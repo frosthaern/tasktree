@@ -1,6 +1,4 @@
-#include <stdint.h>
-#include <stdlib.h>
-#include <time.h>
+#include "../include/tasktree.h"
 
 void init_rand() { srand(time(NULL)); }
 

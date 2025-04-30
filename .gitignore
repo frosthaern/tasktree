@@ -53,3 +53,8 @@ dkms.conf
 
 # ignore git shit
 .git/
+.gitignore
+
+# libraries
+src/raygui.c
+Object/*
