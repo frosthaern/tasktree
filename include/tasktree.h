@@ -1,16 +1,19 @@
 #ifndef TASKTREE_H
 #define TASKTREE_H
 
-#include "../src/raygui.c"
+char *takeTodoTitle();
+
+#include "raygui.h"
+#define RAYGYI_IMPLEMENTATION
 #include <raylib.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 #include <unistd.h>
 
-// From helper.c
 void init_rand();
 int32_t random_number();
 
@@ -20,18 +23,25 @@ typedef struct Todo {
     bool completed;
     Rectangle bounds;
     int32_t parent_id;
+    struct Todo *parent;
     struct Todo **children;
+    int32_t depth;
     int32_t num_children;
     int32_t capacity;
     bool expanded;
 } Todo;
 
-Todo *createTodo(char *title);
+Todo *newTodo(char *title);
 void destroyTodo(Todo *todo);
+void removeChildFromParent(Todo *parent, Todo *child);
 void addChild(Todo *parent, Todo *child);
 int32_t calculateLayout(Todo *root, int32_t x, int32_t y);
+void moveTodoDown(Todo *todo);
+void moveTodoUp(Todo *todo);
+char *takeTodoTitle();
+int32_t calcTotalHeight(Todo *root);
+char *intToString(int32_t num);
 
-// From draw.c
 Rectangle newRectangle(int x, int y, int width, int height);
 Vector2 newVector2(float x, float y);
 void drawLayout(Todo *todo, Font *f);
