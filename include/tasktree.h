@@ -4,7 +4,7 @@
 char *takeTodoTitle();
 
 #include "raygui.h"
-#define RAYGYI_IMPLEMENTATION
+#define RAYGUI_IMPLEMENTATION
 #include <raylib.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -31,6 +31,10 @@ typedef struct Todo {
     bool expanded;
 } Todo;
 
+extern bool show_input_modal;
+extern char input_buffer[50];
+extern struct Todo *pending_parent;
+
 Todo *newTodo(char *title);
 void destroyTodo(Todo *todo);
 void removeChildFromParent(Todo *parent, Todo *child);
@@ -44,6 +48,6 @@ char *intToString(int32_t num);
 
 Rectangle newRectangle(int x, int y, int width, int height);
 Vector2 newVector2(float x, float y);
-void drawLayout(Todo *todo, Font *f);
+void drawLayout(Todo *todo, Font *font);
 
 #endif // TASKTREE_H

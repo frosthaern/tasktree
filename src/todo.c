@@ -1,8 +1,7 @@
 #include "../include/tasktree.h"
 
-const int32_t TODO_WIDTH = 600;
-const int32_t TODO_HEIGHT = 100;
-const int32_t INDENTATION = 20;
+const int32_t TODO_WIDTH = 800;
+const int32_t TODO_HEIGHT = 125;
 
 Todo *newTodo(char *title) {
     Todo *todo = malloc(sizeof(Todo));
@@ -16,7 +15,7 @@ Todo *newTodo(char *title) {
     todo->num_children = 0;
     todo->depth = 0;
     todo->capacity = 0;
-    todo->expanded = false;
+    todo->expanded = true;
     return todo;
 }
 
@@ -33,12 +32,14 @@ void destroyTodo(Todo *todo) {
 
 void removeChildFromParent(Todo *parent, Todo *child) {
     int32_t j = 0;
-    for (int32_t i = 0; i < parent->num_children; ++i) {
-        if (parent->children[i] != child) {
-            parent->children[j++] = parent->children[i];
+    if (parent->children != NULL) {
+        for (int32_t i = 0; i < parent->num_children; ++i) {
+            if (parent->children[i] != child) {
+                parent->children[j++] = parent->children[i];
+            }
         }
+        parent->num_children--;
     }
-    parent->num_children--;
 }
 
 void addChild(Todo *parent, Todo *child) {
@@ -46,7 +47,7 @@ void addChild(Todo *parent, Todo *child) {
         parent->capacity = parent->capacity == 0 ? 1 : parent->capacity * 2;
         parent->children = realloc(parent->children, parent->capacity * sizeof(Todo *));
         if (parent->children == NULL) {
-            printf("Memory allocation failed\n");
+            printf("Memory allocation failed in addChild\n");
             exit(1);
         }
     }
@@ -62,7 +63,7 @@ int32_t calculateLayout(Todo *root, int32_t x, int32_t y) {
     root->bounds.width = TODO_WIDTH;
     root->bounds.height = TODO_HEIGHT;
     int32_t child_y = y + TODO_HEIGHT;
-    if (root->expanded) {
+    if (root->children && root->expanded) {
         for (int32_t i = 0; i < root->num_children; ++i) {
             child_y = calculateLayout(root->children[i], x, child_y);
         }
@@ -86,14 +87,25 @@ void moveTodoUp(Todo *todo) {
 void moveTodoDown(Todo *todo) {
     if (!todo || !todo->parent || todo->parent->num_children <= 1) return;
     Todo *parent = todo->parent;
+    int32_t idx = -1;
     for (int32_t i = 0; i < parent->num_children - 1; ++i) {
         if (parent->children[i] == todo) {
-            Todo *next = parent->children[i + 1];
-            parent->children[i + 1] = parent->children[i];
-            parent->children[i] = next;
-            return;
+            idx = i;
+            break;
         }
     }
+    if (idx == -1) return;
+    printf("Before move:");
+    for (int i = 0; i < parent->num_children; i++)
+        printf(" [%d]%s", i, parent->children[i]->title);
+
+    Todo *next = parent->children[idx + 1];
+    parent->children[idx + 1] = parent->children[idx];
+    parent->children[idx] = next;
+
+    printf("\nAfter move:");
+    for (int i = 0; i < parent->num_children; i++)
+        printf(" [%d]%s", i, parent->children[i]->title);
 }
 
 int32_t calcTotalHeight(Todo *root) {

@@ -1,20 +1,39 @@
 #include "../include/tasktree.h"
 #include <raylib.h>
+#include <string.h>
 
 const char *MAIN_WINDOW_TITLE = "tasktree";
-const int32_t SCROLL_MULTIPLYER = 20;
+const int32_t SCROLL_MULTIPLYER = 50;
+static const int32_t MAIN_WINDOW_WIDTH = 800;
+static const int32_t MAIN_WINDOW_HEIGHT = 750;
+const int32_t INPUT_BOX_WIDTH = 750;
+const int32_t INPUT_BOX_HEIGHT = 100;
+bool show_input_modal = false;
+char input_buffer[50] = "";
+struct Todo *pending_parent = NULL;
+#define NUM_ASCII 95 // 0x20-0x7E (space to ~)
+#define NUM_EXTRA 7  // Your custom symbols
 
 int main() {
     int32_t scroll_offset = -1;
-    int32_t MAIN_WINDOW_WIDTH = 650;
-    int32_t MAIN_WINDOW_HEIGHT = 1000;
     init_rand();
-    Font f = LoadFont("/usr/share/fonts/TTF/JetBrainsMono-Regular.ttf");
-    SetTargetFPS(60);
     InitWindow(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT, MAIN_WINDOW_TITLE);
-
+    int codepoints[NUM_ASCII + NUM_EXTRA];
+    for (int i = 0; i < NUM_ASCII; i++) {
+        codepoints[i] = 0x20 + i;
+    }
+    codepoints[NUM_ASCII + 0] = 0x22a0; // ➕
+    codepoints[NUM_ASCII + 1] = 0xf1f8; // ➖
+    codepoints[NUM_ASCII + 2] = 0xf096; // ◻
+    codepoints[NUM_ASCII + 3] = 0x25a0; // ◼
+    codepoints[NUM_ASCII + 4] = 0x25b6; // ▶
+    codepoints[NUM_ASCII + 5] = 0x25bc; // ▼
+    codepoints[NUM_ASCII + 6] = 0x25b2; // ▲
+    Font f = LoadFontEx("/usr/share/fonts/TTF/JetBrainsMonoNLNerdFontMono-Regular.ttf", 24, codepoints, NUM_ASCII + NUM_EXTRA);
+    GuiSetFont(f);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, 32);
+    SetTargetFPS(90);
     Todo *root = newTodo("Root Todo");
-    root->expanded = true;
     Todo *child1 = newTodo("Child 1");
     Todo *child2 = newTodo("Child 2");
     Todo *child3 = newTodo("Child 3");
@@ -25,23 +44,29 @@ int main() {
 
     while (!WindowShouldClose()) {
         scroll_offset += GetMouseWheelMove() * SCROLL_MULTIPLYER;
-        printf("scroll_offset: %d\n", scroll_offset);
         int32_t total_height = calcTotalHeight(root);
-        if (total_height < MAIN_WINDOW_HEIGHT) {
-            scroll_offset = 0;
-            SetWindowSize(MAIN_WINDOW_WIDTH, total_height + 25);
-        }
         if (scroll_offset > total_height - MAIN_WINDOW_HEIGHT) scroll_offset = total_height - MAIN_WINDOW_HEIGHT;
         if (scroll_offset < 0) scroll_offset = 0;
-        calculateLayout(root, 20, 20 - scroll_offset);
+        calculateLayout(root, 0, 0 - scroll_offset);
         BeginDrawing();
         ClearBackground(RAYWHITE);
         drawLayout(root, &f);
+        if (show_input_modal) {
+            Rectangle input_box_bounds = newRectangle(((MAIN_WINDOW_WIDTH / 2) - (INPUT_BOX_WIDTH / 2)), ((total_height / 2) - (INPUT_BOX_HEIGHT / 2)), INPUT_BOX_WIDTH, INPUT_BOX_HEIGHT);
+            GuiTextBox(input_box_bounds, input_buffer, 100, true);
+            if (IsKeyPressed(KEY_ENTER) && input_buffer[0] != '\0') {
+                Todo *new_child_parent = newTodo(strdup(input_buffer));
+                addChild(pending_parent, new_child_parent);
+                show_input_modal = false;
+            }
+            if (IsKeyPressed(KEY_ESCAPE)) {
+                show_input_modal = false;
+            }
+        }
         EndDrawing();
     };
-
+    UnloadFont(f);
     destroyTodo(root);
     CloseWindow();
-    UnloadFont(f);
     return 0;
 }
