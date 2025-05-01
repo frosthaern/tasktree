@@ -4,7 +4,6 @@
 
 const int32_t SQUARE_BUTTON_SIZE = 40;
 const int32_t SQUARE_BUTTON_PADDING = 10;
-const int32_t FONTSIZE = 30;
 
 Rectangle newRectangle(int x, int y, int width, int height) {
     Rectangle rect = {x, y, width, height};

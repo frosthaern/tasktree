@@ -6,8 +6,9 @@ static const int32_t MAIN_WINDOW_WIDTH = 800;
 static const int32_t MAIN_WINDOW_HEIGHT = 750;
 const int32_t INPUT_BOX_WIDTH = 750;
 const int32_t INPUT_BOX_HEIGHT = 100;
+const int32_t FONTSIZE = 32;
 bool show_input_modal = false;
-char input_buffer[50] = "";
+char input_buffer[INPUT_MODEL_BUFFER_SIZE] = "";
 struct Todo *pending_parent = NULL;
 const int32_t NUM_ASCII = 95;
 const int32_t NUM_EXTRA = 7;
@@ -18,7 +19,7 @@ int main() {
     InitWindow(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT, MAIN_WINDOW_TITLE);
     Font *f = loadFontWithGlyph();
     GuiSetFont(*f);
-    GuiSetStyle(DEFAULT, TEXT_SIZE, 32);
+    GuiSetStyle(DEFAULT, TEXT_SIZE, FONTSIZE);
     SetTargetFPS(120);
     SetExitKey(0);
     Todo *root = newTodo("Root Todo");
@@ -41,7 +42,7 @@ int main() {
         drawLayout(root, f);
         if (show_input_modal) {
             Rectangle input_box_bounds = newRectangle(((MAIN_WINDOW_WIDTH / 2) - (INPUT_BOX_WIDTH / 2)), ((total_height / 2) - (INPUT_BOX_HEIGHT / 2)), INPUT_BOX_WIDTH, INPUT_BOX_HEIGHT);
-            GuiTextBox(input_box_bounds, input_buffer, 100, true);
+            GuiTextBox(input_box_bounds, input_buffer, INPUT_MODEL_BUFFER_SIZE, true);
             if (IsKeyPressed(KEY_ENTER) && input_buffer[0] != '\0') {
                 Todo *new_child_parent = newTodo(strdup(input_buffer));
                 addChild(pending_parent, new_child_parent);
