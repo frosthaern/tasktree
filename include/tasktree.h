@@ -50,4 +50,5 @@ Rectangle newRectangle(int x, int y, int width, int height);
 Vector2 newVector2(float x, float y);
 void drawLayout(Todo *todo, Font *font);
 
+Font *loadFontWithGlyph();
 #endif // TASKTREE_H

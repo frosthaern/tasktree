@@ -4,6 +4,7 @@
 
 const int32_t SQUARE_BUTTON_SIZE = 40;
 const int32_t SQUARE_BUTTON_PADDING = 10;
+const int32_t FONTSIZE = 30;
 
 Rectangle newRectangle(int x, int y, int width, int height) {
     Rectangle rect = {x, y, width, height};
@@ -24,11 +25,17 @@ void drawLayout(Todo *todo, Font *font) {
     if (todo->parent != NULL) {
         Vector2 todo_depth_coords = newVector2(todo_rectangle_bounds.x + 10, todo_rectangle_bounds.y + 10);
         char *depth = intToString(todo->depth);
-        DrawTextEx(*font, depth, todo_depth_coords, 24, 0, BLACK);
+        DrawTextEx(*font, depth, todo_depth_coords, FONTSIZE, 0, BLACK);
         Rectangle todo_depth_border_bounds = newRectangle(todo_depth_coords.x - 5, todo_depth_coords.y - 5, (strlen(depth) + 1) * 13, 36);
         DrawRectangleLinesEx(todo_depth_border_bounds, 2, BLACK);
         Vector2 todo_title_coords = newVector2(todo_depth_border_bounds.x + todo_depth_border_bounds.width + 20, todo_depth_border_bounds.y);
-        DrawTextEx(*font, todo->title, todo_title_coords, 24, 0, BLACK);
+        DrawTextEx(*font, todo->title, todo_title_coords, FONTSIZE, 0, BLACK);
+        if (todo->completed) {
+            int32_t textWidth = MeasureText(todo->title, FONTSIZE);
+            int32_t line_y_coords = todo_title_coords.y + (int32_t)(FONTSIZE / 2);
+            // DrawLine(todo_title_coords.x, line_y_coords, todo_title_coords.x + textWidth, line_y_coords, BLACK);
+            DrawLineEx((Vector2){todo_title_coords.x, line_y_coords}, (Vector2){todo_title_coords.x + textWidth, line_y_coords}, 3, BLACK);
+        }
         const int32_t num_buttons = 6;
 
         int32_t start_x = todo_rectangle_bounds.x + SQUARE_BUTTON_PADDING;

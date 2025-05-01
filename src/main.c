@@ -1,6 +1,5 @@
 #include "../include/tasktree.h"
 #include <raylib.h>
-#include <string.h>
 
 const char *MAIN_WINDOW_TITLE = "tasktree";
 const int32_t SCROLL_MULTIPLYER = 50;
@@ -11,28 +10,18 @@ const int32_t INPUT_BOX_HEIGHT = 100;
 bool show_input_modal = false;
 char input_buffer[50] = "";
 struct Todo *pending_parent = NULL;
-#define NUM_ASCII 95 // 0x20-0x7E (space to ~)
-#define NUM_EXTRA 7  // Your custom symbols
+const int32_t NUM_ASCII = 95;
+const int32_t NUM_EXTRA = 7;
 
 int main() {
     int32_t scroll_offset = -1;
     init_rand();
     InitWindow(MAIN_WINDOW_WIDTH, MAIN_WINDOW_HEIGHT, MAIN_WINDOW_TITLE);
-    int codepoints[NUM_ASCII + NUM_EXTRA];
-    for (int i = 0; i < NUM_ASCII; i++) {
-        codepoints[i] = 0x20 + i;
-    }
-    codepoints[NUM_ASCII + 0] = 0x22a0; // ➕
-    codepoints[NUM_ASCII + 1] = 0xf1f8; // ➖
-    codepoints[NUM_ASCII + 2] = 0xf096; // ◻
-    codepoints[NUM_ASCII + 3] = 0x25a0; // ◼
-    codepoints[NUM_ASCII + 4] = 0x25b6; // ▶
-    codepoints[NUM_ASCII + 5] = 0x25bc; // ▼
-    codepoints[NUM_ASCII + 6] = 0x25b2; // ▲
-    Font f = LoadFontEx("/usr/share/fonts/TTF/JetBrainsMonoNLNerdFontMono-Regular.ttf", 24, codepoints, NUM_ASCII + NUM_EXTRA);
-    GuiSetFont(f);
+    Font *f = loadFontWithGlyph();
+    GuiSetFont(*f);
     GuiSetStyle(DEFAULT, TEXT_SIZE, 32);
-    SetTargetFPS(90);
+    SetTargetFPS(120);
+    SetExitKey(0);
     Todo *root = newTodo("Root Todo");
     Todo *child1 = newTodo("Child 1");
     Todo *child2 = newTodo("Child 2");
@@ -50,7 +39,7 @@ int main() {
         calculateLayout(root, 0, 0 - scroll_offset);
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        drawLayout(root, &f);
+        drawLayout(root, f);
         if (show_input_modal) {
             Rectangle input_box_bounds = newRectangle(((MAIN_WINDOW_WIDTH / 2) - (INPUT_BOX_WIDTH / 2)), ((total_height / 2) - (INPUT_BOX_HEIGHT / 2)), INPUT_BOX_WIDTH, INPUT_BOX_HEIGHT);
             GuiTextBox(input_box_bounds, input_buffer, 100, true);
@@ -65,8 +54,25 @@ int main() {
         }
         EndDrawing();
     };
-    UnloadFont(f);
+    UnloadFont(*f);
     destroyTodo(root);
     CloseWindow();
     return 0;
+}
+
+Font *loadFontWithGlyph() {
+    int codepoints[NUM_ASCII + NUM_EXTRA];
+    for (int i = 0; i < NUM_ASCII; i++) {
+        codepoints[i] = 0x20 + i;
+    }
+    codepoints[NUM_ASCII + 0] = 0x22a0;
+    codepoints[NUM_ASCII + 1] = 0xf1f8;
+    codepoints[NUM_ASCII + 2] = 0xf096;
+    codepoints[NUM_ASCII + 3] = 0x25a0;
+    codepoints[NUM_ASCII + 4] = 0x25b6;
+    codepoints[NUM_ASCII + 5] = 0x25bc;
+    codepoints[NUM_ASCII + 6] = 0x25b2;
+    Font *f = malloc(sizeof(Font));
+    *f = LoadFontEx("/usr/share/fonts/TTF/JetBrainsMonoNLNerdFontMono-Regular.ttf", 24, codepoints, NUM_ASCII + NUM_EXTRA);
+    return f;
 }
