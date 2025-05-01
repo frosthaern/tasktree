@@ -1,5 +1,4 @@
 #include "../include/tasktree.h"
-#include <raylib.h>
 
 const char *MAIN_WINDOW_TITLE = "tasktree";
 const int32_t SCROLL_MULTIPLYER = 50;
@@ -73,6 +72,6 @@ Font *loadFontWithGlyph() {
     codepoints[NUM_ASCII + 5] = 0x25bc;
     codepoints[NUM_ASCII + 6] = 0x25b2;
     Font *f = malloc(sizeof(Font));
-    *f = LoadFontEx("/usr/share/fonts/TTF/JetBrainsMonoNLNerdFontMono-Regular.ttf", 24, codepoints, NUM_ASCII + NUM_EXTRA);
+    *f = LoadFontEx("resource/font.ttf", 24, codepoints, NUM_ASCII + NUM_EXTRA);
     return f;
 }
