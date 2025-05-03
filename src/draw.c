@@ -1,6 +1,4 @@
 #include "../include/tasktree.h"
-#include <raylib.h>
-#include <stdio.h>
 
 const int32_t SQUARE_BUTTON_SIZE = 40;
 const int32_t SQUARE_BUTTON_PADDING = 10;

@@ -35,6 +35,9 @@ int main() {
     int32_t numTodos = 0;
     Todo **todoArray = loadTodosArray(db, &numTodos);
     loadTodos(db, root, todoArray, &numTodos);
+    if (sqlite3_exec(db, "DELETE FROM todos;", 0, 0, 0) != SQLITE_OK) {
+        printf("[ERROR]: error deleting todos in main file %s\n", sqlite3_errmsg(db));
+    }
     while (!WindowShouldClose()) {
         scroll_offset += GetMouseWheelMove() * SCROLL_MULTIPLYER;
         int32_t total_height = calcTotalHeight(root);
@@ -59,11 +62,9 @@ int main() {
         EndDrawing();
     };
     saveTodos(db, root);
-    for (int i = 0; i < numTodos; i++) {
-        destroyTodo(todoArray[i]);
+    if (sqlite3_close(db) == SQLITE_OK) {
+        printf("database closed properly");
     }
-    sqlite3_close(db);
-    UnloadFont(*f);
     destroyTodo(root);
     CloseWindow();
     return 0;
@@ -82,6 +83,6 @@ Font *loadFontWithGlyph() {
     codepoints[NUM_ASCII + 5] = 0x25bc;
     codepoints[NUM_ASCII + 6] = 0x25b2;
     Font *f = malloc(sizeof(Font));
-    *f = LoadFontFromMemory(".ttf", trimmed_ttf, trimmed_ttf_len, 24, codepoints, NUM_ASCII + NUM_EXTRA);
+    *f = LoadFontFromMemory(".ttf", trimmed_ttf, trimmed_ttf_len, 32, codepoints, NUM_ASCII + NUM_EXTRA);
     return f;
 }
