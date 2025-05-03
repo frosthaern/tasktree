@@ -23,13 +23,6 @@ int main() {
     SetTargetFPS(120);
     SetExitKey(0);
     Todo *root = newTodo("Root Todo");
-    Todo *child1 = newTodo("Child 1");
-    Todo *child2 = newTodo("Child 2");
-    Todo *child3 = newTodo("Child 3");
-    addChild(root, child1);
-    addChild(root, child2);
-    addChild(root, child3);
-    child2->completed = true;
 
     while (!WindowShouldClose()) {
         scroll_offset += GetMouseWheelMove() * SCROLL_MULTIPLYER;
