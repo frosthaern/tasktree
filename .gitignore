@@ -65,3 +65,6 @@ Object/*
 
 # binaries
 main
+
+# db files
+todos.db
