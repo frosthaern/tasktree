@@ -1,6 +1,6 @@
 # tasktree
 
-A simple todo list application written in C using raylib. Designed for personal productivity and as a way to learn low-level programming and graphics.
+An infinitely recursive tasktree application written in C using raylib. Designed for personal productivity and as a way to learn low-level programming and graphics.
 
 ## Features
 
