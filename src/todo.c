@@ -95,17 +95,9 @@ void moveTodoDown(Todo *todo) {
         }
     }
     if (idx == -1) return;
-    printf("\nBefore move:\n");
-    for (int i = 0; i < parent->num_children; i++)
-        printf("\n[%d]%s\n", i, parent->children[i]->title);
-
     Todo *next = parent->children[idx + 1];
     parent->children[idx + 1] = parent->children[idx];
     parent->children[idx] = next;
-
-    printf("\nAfter move\n");
-    for (int i = 0; i < parent->num_children; i++)
-        printf("\n[%d]%s\n", i, parent->children[i]->title);
     return;
 }
 

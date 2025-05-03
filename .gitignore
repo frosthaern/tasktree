@@ -68,3 +68,7 @@ main
 
 # db files
 todos.db
+
+# font
+font
+trimmed.ttf

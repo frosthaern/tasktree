@@ -3,9 +3,8 @@
 
 char *takeTodoTitle();
 
-#include <raylib.h>
-#define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
+#include <raylib.h>
 #include <sqlite3.h>
 #include <stdbool.h>
 #include <stdint.h>

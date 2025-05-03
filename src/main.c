@@ -1,5 +1,5 @@
+#include "../include/font.h"
 #include "../include/tasktree.h"
-#include <sqlite3.h>
 
 const char *MAIN_WINDOW_TITLE = "tasktree";
 const int32_t SCROLL_MULTIPLYER = 50;
@@ -34,18 +34,7 @@ int main() {
     root->expanded = true;
     int32_t numTodos = 0;
     Todo **todoArray = loadTodosArray(db, &numTodos);
-    printf("Number of Todos: %d\n", numTodos);
-    for (int i = 0; i < numTodos; ++i) {
-        printf("%d\n", todoArray[i]->id);
-        printf("%s\n", todoArray[i]->title);
-        printf("%d\n", todoArray[i]->completed);
-        printf("%d\n", todoArray[i]->parent_id);
-    }
     loadTodos(db, root, todoArray, &numTodos);
-    if (sqlite3_exec(db, "DELETE FROM todos", 0, 0, 0) != SQLITE_OK) {
-        printf("Failed to delete todos.\n");
-    }
-
     while (!WindowShouldClose()) {
         scroll_offset += GetMouseWheelMove() * SCROLL_MULTIPLYER;
         int32_t total_height = calcTotalHeight(root);
@@ -93,6 +82,6 @@ Font *loadFontWithGlyph() {
     codepoints[NUM_ASCII + 5] = 0x25bc;
     codepoints[NUM_ASCII + 6] = 0x25b2;
     Font *f = malloc(sizeof(Font));
-    *f = LoadFontEx("resource/font.ttf", 24, codepoints, NUM_ASCII + NUM_EXTRA);
+    *f = LoadFontFromMemory(".ttf", trimmed_ttf, trimmed_ttf_len, 24, codepoints, NUM_ASCII + NUM_EXTRA);
     return f;
 }
