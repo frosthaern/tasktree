@@ -30,8 +30,3 @@ An infinitely recursive tasktree application written in C using raylib. Designed
 
 Shashank Bharadwaj  
 [GitHub](https://github.com/frosthaern)
-
-# todo remaining 
-
-- fix the down button
-- persistent storage
