@@ -6,6 +6,7 @@ char *takeTodoTitle();
 #include "raygui.h"
 #define RAYGUI_IMPLEMENTATION
 #include <raylib.h>
+#include <sqlite3.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -37,6 +38,7 @@ extern char input_buffer[INPUT_MODEL_BUFFER_SIZE];
 extern struct Todo *pending_parent;
 extern const int32_t FONTSIZE;
 
+// for todos in todo file
 Todo *newTodo(char *title);
 void destroyTodo(Todo *todo);
 void removeChildFromParent(Todo *parent, Todo *child);
@@ -48,9 +50,16 @@ char *takeTodoTitle();
 int32_t calcTotalHeight(Todo *root);
 char *intToString(int32_t num);
 
+// for drawing stuff
 Rectangle newRectangle(int x, int y, int width, int height);
 Vector2 newVector2(float x, float y);
 void drawLayout(Todo *todo, Font *font);
 
+// in main fil
 Font *loadFontWithGlyph();
+
+// for sql stuff
+void saveTodos(sqlite3 *db, Todo *root);
+Todo **loadTodosArray(sqlite3 *db, int32_t *number_of_todos);
+void loadTodos(sqlite3 *db, Todo *todo, Todo **todoArray, int32_t *no_of_todos);
 #endif // TASKTREE_H

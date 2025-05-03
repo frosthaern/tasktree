@@ -1,8 +1,8 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror -std=c23 -pedantic -O2 -g
-LIBS = -lraylib -lm -lpthread -ldl -lrt -lX11
+LIBS = -lraylib -lm -lpthread -ldl -lrt -lX11 -lsqlite3
 
-OBJECTS = object/main.o object/draw.o object/helper.o object/todo.o object/raygui.o
+OBJECTS = object/main.o object/draw.o object/helper.o object/todo.o object/raygui.o object/sql.o
 
 all: main clean
 
@@ -20,6 +20,9 @@ object/helper.o: src/helper.c include/tasktree.h
 
 object/todo.o: src/todo.c include/tasktree.h
 	$(CC) $(CFLAGS) -c src/todo.c -o object/todo.o
+
+object/sql.o: src/sql.c include/tasktree.h
+	$(CC) $(CFLAGS) -c src/sql.c -o object/sql.o
 
 main: $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) $(LIBS) -o main

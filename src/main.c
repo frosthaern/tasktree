@@ -1,4 +1,5 @@
 #include "../include/tasktree.h"
+#include <sqlite3.h>
 
 const char *MAIN_WINDOW_TITLE = "tasktree";
 const int32_t SCROLL_MULTIPLYER = 50;
@@ -22,7 +23,28 @@ int main() {
     GuiSetStyle(DEFAULT, TEXT_SIZE, FONTSIZE);
     SetTargetFPS(120);
     SetExitKey(0);
+    sqlite3 *db;
+    sqlite3_open("todos.db", &db);
+    sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY, title TEXT NOT NULL, completed INTEGER NOT NULL DEFAULT 0, parent_id INTEGER NOT NULL);", 0, 0, 0);
     Todo *root = newTodo("Root Todo");
+    root->id = 0;
+    root->capacity = 0;
+    root->depth = 0;
+    root->parent = NULL;
+    root->expanded = true;
+    int32_t numTodos = 0;
+    Todo **todoArray = loadTodosArray(db, &numTodos);
+    printf("Number of Todos: %d\n", numTodos);
+    for (int i = 0; i < numTodos; ++i) {
+        printf("%d\n", todoArray[i]->id);
+        printf("%s\n", todoArray[i]->title);
+        printf("%d\n", todoArray[i]->completed);
+        printf("%d\n", todoArray[i]->parent_id);
+    }
+    loadTodos(db, root, todoArray, &numTodos);
+    if (sqlite3_exec(db, "DELETE FROM todos", 0, 0, 0) != SQLITE_OK) {
+        printf("Failed to delete todos.\n");
+    }
 
     while (!WindowShouldClose()) {
         scroll_offset += GetMouseWheelMove() * SCROLL_MULTIPLYER;
@@ -34,7 +56,7 @@ int main() {
         ClearBackground(RAYWHITE);
         drawLayout(root, f);
         if (show_input_modal) {
-            Rectangle input_box_bounds = newRectangle(((MAIN_WINDOW_WIDTH / 2) - (INPUT_BOX_WIDTH / 2)), ((total_height / 2) - (INPUT_BOX_HEIGHT / 2)), INPUT_BOX_WIDTH, INPUT_BOX_HEIGHT);
+            Rectangle input_box_bounds = newRectangle(((MAIN_WINDOW_WIDTH / 2) - (INPUT_BOX_WIDTH / 2)), ((MAIN_WINDOW_HEIGHT / 2) - (INPUT_BOX_HEIGHT / 2)), INPUT_BOX_WIDTH, INPUT_BOX_HEIGHT);
             GuiTextBox(input_box_bounds, input_buffer, INPUT_MODEL_BUFFER_SIZE, true);
             if (IsKeyPressed(KEY_ENTER) && input_buffer[0] != '\0') {
                 Todo *new_child_parent = newTodo(strdup(input_buffer));
@@ -47,6 +69,11 @@ int main() {
         }
         EndDrawing();
     };
+    saveTodos(db, root);
+    for (int i = 0; i < numTodos; i++) {
+        destroyTodo(todoArray[i]);
+    }
+    sqlite3_close(db);
     UnloadFont(*f);
     destroyTodo(root);
     CloseWindow();
