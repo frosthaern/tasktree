@@ -4,10 +4,10 @@
 const char *MAIN_WINDOW_TITLE = "tasktree";
 const int32_t SCROLL_MULTIPLYER = 50;
 static const int32_t MAIN_WINDOW_WIDTH = 800;
-static const int32_t MAIN_WINDOW_HEIGHT = 750;
+static const int32_t MAIN_WINDOW_HEIGHT = 800;
 const int32_t INPUT_BOX_WIDTH = 750;
 const int32_t INPUT_BOX_HEIGHT = 100;
-const int32_t FONTSIZE = 32;
+const int32_t FONTSIZE = 24;
 bool show_input_modal = false;
 char input_buffer[INPUT_MODEL_BUFFER_SIZE] = "";
 struct Todo *pending_parent = NULL;
@@ -83,6 +83,6 @@ Font *loadFontWithGlyph() {
     codepoints[NUM_ASCII + 5] = 0x25bc;
     codepoints[NUM_ASCII + 6] = 0x25b2;
     Font *f = malloc(sizeof(Font));
-    *f = LoadFontFromMemory(".ttf", trimmed_ttf, trimmed_ttf_len, 32, codepoints, NUM_ASCII + NUM_EXTRA);
+    *f = LoadFontFromMemory(".ttf", trimmed_ttf, trimmed_ttf_len, FONTSIZE, codepoints, NUM_ASCII + NUM_EXTRA);
     return f;
 }

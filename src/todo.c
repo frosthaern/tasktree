@@ -1,7 +1,7 @@
 #include "../include/tasktree.h"
 
 const int32_t TODO_WIDTH = 800;
-const int32_t TODO_HEIGHT = 125;
+const int32_t TODO_HEIGHT = 100;
 
 Todo *newTodo(char *title) {
     Todo *todo = malloc(sizeof(Todo));

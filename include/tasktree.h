@@ -32,7 +32,7 @@ typedef struct Todo {
 } Todo;
 
 extern bool show_input_modal;
-#define INPUT_MODEL_BUFFER_SIZE 50
+#define INPUT_MODEL_BUFFER_SIZE 60
 extern char input_buffer[INPUT_MODEL_BUFFER_SIZE];
 extern struct Todo *pending_parent;
 extern const int32_t FONTSIZE;

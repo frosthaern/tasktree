@@ -1,6 +1,6 @@
 #include "../include/tasktree.h"
 
-const int32_t SQUARE_BUTTON_SIZE = 40;
+const int32_t SQUARE_BUTTON_SIZE = 30;
 const int32_t SQUARE_BUTTON_PADDING = 10;
 
 Rectangle newRectangle(int x, int y, int width, int height) {
@@ -23,7 +23,7 @@ void drawLayout(Todo *todo, Font *font) {
         Vector2 todo_depth_coords = newVector2(todo_rectangle_bounds.x + 10, todo_rectangle_bounds.y + 10);
         char *depth = intToString(todo->depth);
         DrawTextEx(*font, depth, todo_depth_coords, FONTSIZE, 0, BLACK);
-        Rectangle todo_depth_border_bounds = newRectangle(todo_depth_coords.x - 5, todo_depth_coords.y - 5, (strlen(depth) + 1) * 13, 36);
+        Rectangle todo_depth_border_bounds = newRectangle(todo_depth_coords.x - 5, todo_depth_coords.y - 1, (strlen(depth) + 1) * 10, 24);
         DrawRectangleLinesEx(todo_depth_border_bounds, 2, BLACK);
         Vector2 todo_title_coords = newVector2(todo_depth_border_bounds.x + todo_depth_border_bounds.width + 20, todo_depth_border_bounds.y);
         DrawTextEx(*font, todo->title, todo_title_coords, FONTSIZE, 0, BLACK);

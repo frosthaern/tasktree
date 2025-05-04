@@ -4,7 +4,6 @@ An infinitely recursive tasktree application written in C using raylib. Designed
 
 ## Features
 
-- Minimalist todo list manager
 - Built using [raylib](https://www.raylib.com/) for graphics
 - Focused on simplicity and speed
 - Great for learning and experimenting with C and graphics programming
@@ -23,10 +22,19 @@ An infinitely recursive tasktree application written in C using raylib. Designed
    ```
 4. Run the application:
    ```sh
+   mv main tasktree
    ./tasktree
    ```
 
+### or
+
+1. Install [raylib](https://www.raylib.com/) from your distro package manager.
+2. install the latest binary from the releases
+3. run the binary
+
 ## Author
 
-Shashank Bharadwaj  
+Shashank Bharadwaj
 [GitHub](https://github.com/frosthaern)
+
+# have to rewrite
