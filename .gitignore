@@ -72,3 +72,6 @@ todos.db
 # font
 font
 trimmed.ttf
+
+# other files
+Todo.md
