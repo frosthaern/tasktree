@@ -3,7 +3,7 @@ name: Build and Release
 on:
   push:
     branches:
-      - '**'
+      - "**"
 
 jobs:
   build-release:
@@ -12,13 +12,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-
       - name: Get next tag version
         id: next_tag
         run: |
           latest_tag=$(git tag --list 'v*' --sort=-v:refname | head -n 1)
           if [ -z "$latest_tag" ]; then
-            next_tag="v0.0.4"
+            next_tag="v0.0.5"
           else
             IFS='.' read -r major minor patch <<< "${latest_tag#v}"
             patch=$((patch+1))
