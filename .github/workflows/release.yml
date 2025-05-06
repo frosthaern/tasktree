@@ -25,6 +25,10 @@ jobs:
           fi
           echo "next_tag=$next_tag" >> $GITHUB_OUTPUT
 
+      - name: Build binary
+        run: |
+          make
+
       - name: Create new tag
         run: |
           git config user.name "frosthaern"
@@ -34,7 +38,7 @@ jobs:
 
       - name: Rename binary for release
         run: |
-          cp main tasktree-${{ steps.next_tag.outputs.next_tag }}
+          cp tasktree tasktree-${{ steps.next_tag.outputs.next_tag }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
