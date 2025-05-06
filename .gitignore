@@ -59,8 +59,6 @@ resource/
 resource/*
 
 # libraries
-src/raygui.c
-include/raygui.h
 Object/*
 
 # binaries
