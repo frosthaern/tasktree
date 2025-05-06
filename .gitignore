@@ -61,8 +61,7 @@ resource/*
 # libraries
 Object/*
 
-# binaries
-main
+# bi dirnaries
 
 # db files
 todos.db

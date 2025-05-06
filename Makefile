@@ -4,7 +4,7 @@ LIBS = -lraylib -lm -lpthread -ldl -lrt -lX11 -lsqlite3
 
 OBJECTS = object/main.o object/draw.o object/helper.o object/todo.o object/raygui.o object/sql.o
 
-all: dir main
+all: tasktree
 
 dir:
 	mkdir -p object
@@ -27,8 +27,8 @@ object/todo.o: src/todo.c include/tasktree.h
 object/sql.o: src/sql.c include/tasktree.h
 	$(CC) $(CFLAGS) -c src/sql.c -o object/sql.o
 
-main: $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) $(LIBS) -o main
+tasktree: $(OBJECTS)
+	$(CC) $(CFLAGS) $(OBJECTS) $(LIBS) -o tasktree
 
 clean:
 	rm -f object/*.o
