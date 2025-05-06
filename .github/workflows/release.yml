@@ -35,7 +35,7 @@ jobs:
 
       - name: Rename binary for release
         run: |
-          cp tasktree tasktree-${{ steps.next_tag.outputs.next_tag }}
+          cp main tasktree-${{ steps.next_tag.outputs.next_tag }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
