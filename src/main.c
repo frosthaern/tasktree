@@ -1,7 +1,7 @@
 #include "../include/font.h"
 #include "../include/tasktree.h"
 
-// hello world
+// hello
 const char *MAIN_WINDOW_TITLE = "tt";
 const int32_t SCROLL_MULTIPLYER = 50;
 static const int32_t MAIN_WINDOW_WIDTH = 800;
