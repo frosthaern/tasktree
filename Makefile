@@ -4,7 +4,7 @@ LIBS = -lraylib -lm -lpthread -ldl -lrt -lX11 -lsqlite3
 
 OBJECTS = object/main.o object/draw.o object/helper.o object/todo.o object/raygui.o object/sql.o
 
-all: main
+all: dir main
 
 dir:
 	mkdir -p object
