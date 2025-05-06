@@ -15,6 +15,12 @@ jobs:
       - name: Install dependencies
         run: sudo apt-get update && sudo apt-get install -y build-essential pkg-config libx11-dev libxcursor-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libsqlite3-dev
 
+      - name: Install raylib
+        run: |
+          sudo add-apt-repository ppa:alexlarsson/flatpak -y
+          sudo apt-get update
+          sudo apt-get install -y libraylib-dev
+
       - name: Download raygui.h and create raygui.c
         run: |
           mkdir -p src include
