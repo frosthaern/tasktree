@@ -1,0 +1,55 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential pkg-config libx11-dev libxcursor-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libsqlite3-dev
+
+      - name: Download raygui.h and create raygui.c
+        run: |
+          mkdir -p src include
+          curl -L -o include/raygui.h https://raw.githubusercontent.com/raysan5/raygui/refs/heads/master/src/raygui.h
+          cp include/raygui.h src/raygui.c
+
+      - name: Build using Makefile
+        run: make
+
+      - name: Get next tag version
+        id: next_tag
+        run: |
+          latest_tag=$(git tag --list 'v*' --sort=-v:refname | head -n 1)
+          if [ -z "$latest_tag" ]; then
+            next_tag="v0.1.0"
+          else
+            IFS='.' read -r major minor patch <<< "${latest_tag#v}"
+            patch=$((patch+1))
+            next_tag="v$major.$minor.$patch"
+          fi
+          echo "next_tag=$next_tag" >> $GITHUB_OUTPUT
+
+      - name: Create new tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git tag ${{ steps.next_tag.outputs.next_tag }}
+          git push origin ${{ steps.next_tag.outputs.next_tag }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.next_tag.outputs.next_tag }}
+          name: Release ${{ steps.next_tag.outputs.next_tag }}
+          files: |
+            main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
