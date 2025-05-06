@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -std=c23 -pedantic -O2 -g
+CFLAGS = -Wall -Wextra -Werror -std=c2x -pedantic -O2 -g
 LIBS = -lraylib -lm -lpthread -ldl -lrt -lX11 -lsqlite3
 
 OBJECTS = object/main.o object/draw.o object/helper.o object/todo.o object/raygui.o object/sql.o
