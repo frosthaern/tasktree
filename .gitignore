@@ -62,6 +62,8 @@ resource/*
 Object/*
 
 # bi dirnaries
+main
+tasktree
 
 # db files
 todos.db
