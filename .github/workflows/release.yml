@@ -31,7 +31,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git tag ${{ steps.next_tag.outputs.next_tag }}
-          git push origin ${{ steps.next_tag.outputs.next_tag }}
+          git push https://x-access-token:${{ secrets.TASKTREE }}@github.com/${{ github.repository }} ${{ steps.next_tag.outputs.next_tag }}
 
       - name: Rename binary for release
         run: |
@@ -45,4 +45,4 @@ jobs:
           files: |
             tasktree-${{ steps.next_tag.outputs.next_tag }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TASKTREE }}
