@@ -6,6 +6,9 @@ OBJECTS = object/main.o object/draw.o object/helper.o object/todo.o object/raygu
 
 all: main
 
+dir:
+	mkdir -p object
+
 object/raygui.o: src/raygui.c
 	$(CC) -c src/raygui.c -DRAYGUI_IMPLEMENTATION -o object/raygui.o
 
