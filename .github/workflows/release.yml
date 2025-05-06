@@ -8,17 +8,16 @@ on:
 jobs:
   build-release:
     runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y build-essential pkg-config libx11-dev libxcursor-dev libxrandr-dev libxi-dev libgl1-mesa-dev libglu1-mesa-dev libsqlite3-dev
-
-      - name: Install raylib
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libraylib-dev
+          pacman -Syu --noconfirm
+          pacman -S --noconfirm base-devel raylib pkgconf libx11 libxcursor libxrandr libxi mesa glu sqlite
 
       - name: Download raygui.h and create raygui.c
         run: |
