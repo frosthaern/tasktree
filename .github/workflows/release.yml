@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           pacman -Syu --noconfirm
-          pacman -S --noconfirm base-devel raylib pkgconf libx11 libxcursor libxrandr libxi mesa glu sqlite
+          pacman -S --noconfirm base-devel raylib pkgconf libx11 libxcursor libxrandr libxi mesa glu sqlite git
 
       - name: Download raygui.h and create raygui.c
         run: |
